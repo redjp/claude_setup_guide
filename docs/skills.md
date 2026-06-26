@@ -1,22 +1,20 @@
 # スキル（Skills）
 
-**スキル**は、特定の作業手順や専門知識をパッケージ化して Claude に追加できる仕組みです。便利な反面、**導入時の安全確認がとても大切**です。スキルは Claude に「指示」を与えるものなので、中身を確かめずに入れると、意図しない動作につながる恐れがあります。
+スキルは、特定の作業手順や専門知識をパッケージ化して Claude に追加できる仕組みです。便利な反面、**導入時の安全確認がとても大切**です。スキルは Claude に「指示」を与えるものなので、中身を確かめずに入れると、意図しない動作につながる恐れがあります。
 
 ## スキルとは
 
 スキルは、`SKILL.md` という説明ファイルを中心とした小さなフォルダです。`SKILL.md` には、**いつ使うか（説明）** と **何をするか（指示）** が書かれています。Claude はこのファイルを読んで、必要なときにその手順を実行します。
 
-## 安全に導入する手順（例：grill-me）
+## 導入する（例：grill-me ＋ grilling）
 
-ここでは、計画を厳しく問い詰めて磨き上げる **`grill-me`**（実際の処理を呼び出す“ショートカット”スキル）を例に、安全な導入の流れを示します。**他のスキルに依存するケース**の確認方法も学べます。
+`grill-me` は、**`grilling` とセットの「2つで1組」**のスキルです。`grill-me` が「呼び出し用」、`grilling` が「本体（インタビューの中身）」で、**両方をそろえて**使います。
 
-### 手順1：信頼できる配布元から入手する
+### 手順1：中身（SKILL.md）を確認する
 
-スキルは、**発行元が信頼できるもの**だけを使います。出所不明のスキルや、内容を確認できないものは入れないでください。
+スキルは**信頼できる配布元**のものだけを使い、入れる前に必ず中身を読みます。今回の2つは、いずれも次のとおり「指示の文章だけ」で、危険な操作はありません。
 
-### 手順2：有効化する前に中身（SKILL.md）を必ず確認する
-
-これが**最重要**です。`grill-me` の `SKILL.md` は次の通り、ひと目で内容が分かります。
+**① `grill-me`（呼び出し用）の `SKILL.md`：**
 
 ```markdown
 ---
@@ -28,56 +26,67 @@ disable-model-invocation: true
 Run a `/grilling` session.
 ```
 
-確認のポイント：
+**② `grilling`（本体）の `SKILL.md`：**
 
-- **何をする指示か** … ここでは「`/grilling` セッションを実行する」だけ。計画を質問で深掘りする無害な内容だと分かります。
-- **他のスキルやコマンドを呼んでいないか** … `grill-me` は **`/grilling` を呼び出します**。つまり実際の動作は別の **`grilling` スキルにあり、それに依存**しています（→ 手順3で確認）。
-- **余計なスクリプトや外部コマンドが無いか** … `grill-me` はファイル1つだけで、危険な操作は含まれていません。
-- **過剰な権限や外部送信を要求していないか** … 該当なし。
+```markdown
+---
+name: grilling
+description: Interview the user relentlessly about a plan or design. Use when the user wants to stress-test a plan before building, or uses any 'grill' trigger phrases.
+---
+
+Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+
+Ask the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.
+
+If a question can be answered by exploring the codebase, explore the codebase instead.
+```
 
 !!! danger "ここをチェック（危険のサイン）"
     - ファイルやフォルダの**削除**、設定の**書き換え**を指示している
     - **外部URLへデータを送る**、不審なコマンドを実行する
     - 内容が**難読化**されていて読めない
+
     こうしたスキルは導入しないでください。
 
-### 手順3：依存しているスキルも確認・導入する
+### 手順2：所定のフォルダに置く（コピー＆ペースト）
 
-`grill-me` は **単体では動きません**。中身が「`/grilling` を実行する」だけなので、**実際の処理は別の `grilling` スキルにあります**。`grilling` を入れていないと、`grill-me` を導入しても何も起きません（＝**不完全なインストール**）。
+スキルは、ユーザーフォルダ内の `.claude\skills\` に、**スキルごとのフォルダ＋ `SKILL.md`** の形で置きます。
 
-そこで、依存先の `grilling` の `SKILL.md` も同じように中身を確認します。
+1. エクスプローラーのアドレス欄に **`%USERPROFILE%\.claude\skills`** と入力して開く（フォルダが無ければ作成します）
+2. **`grilling`** フォルダを作り、その中に **`SKILL.md`** を新規作成 → 上の **②** の内容をコピーして貼り付け、保存
+3. 同様に **`grill-me`** フォルダを作り、**`SKILL.md`** に上の **①** の内容を貼り付け、保存
+4. **Claude Desktop を再起動**すると認識されます
 
-```markdown
----
-name: grilling
-description: Interview the user relentlessly about a plan or design. ...
----
+最終的なフォルダ構成は次のようになります。
 
-Interview me relentlessly about every aspect of this plan until we reach a
-shared understanding. ...
-（計画を一つずつ問い詰め、設計を詰めていくための指示）
+```text
+C:\Users\<ユーザー名>\.claude\skills\
+├─ grill-me\
+│   └─ SKILL.md   ← ① の内容
+└─ grilling\
+    └─ SKILL.md   ← ② の内容
 ```
 
-- 本体（`grilling`）も**無害な指示だけ**で、危険な操作が無いことを確認します。
-- `grill-me` と `grilling` の **両方** を導入して、はじめて機能します。
+!!! note "🖼 画面イメージ（後日挿入予定）"
+    スキルを置いたフォルダ構成。
 
-!!! tip "依存関係に注意（不完全なインストールを防ぐ）"
-    スキルが他のスキルやコマンド（例：`/grilling`）を呼ぶ場合、**その依存先も一緒に確認・導入**しないと動きません。1つのファイルだけ見て「安全かつ完結している」と思い込まないようにしましょう。
+## チャットでの使い方
 
-### 手順4：所定の場所に置く／アプリから追加する
+入れたスキルは、**チャットの入力欄から呼び出して**使います。
 
-中身に問題がなく、依存先もそろったら、スキル用のフォルダに置く、またはアプリの案内に従って追加します。[Cowork](cowork.md) で使うスキルも同じ考え方です。
+- 入力欄に **`/grill-me`** と入力して実行すると、計画を1つずつ問い詰めるインタビューが始まります。
+- 使いどころ：新しい企画・システム導入・重要な意思決定の**前**に `/grill-me` を実行 → Claude が論点を順番に質問 → **抜け漏れや甘い前提を洗い出せます**。
+- 1問ずつ答えていくと、最後には計画が整理された状態になります。
+
+!!! tip
+    スキルは「入れておき、必要なときに呼び出す」道具です。普段の会話の邪魔はしません。
 
 !!! note "🖼 画面イメージ（後日挿入予定）"
-    スキルの一覧・追加画面。
+    `/grill-me` を実行したチャット画面。
 
 ## セキュリティ上の注意点
 
-- **入れる前に読む** … `SKILL.md` の中身を必ず確認してから有効化する
-- **依存先も確認** … 他のスキルやコマンドを呼ぶスキルは、その**依存先もそろえて**確認・導入する（でないと動かない／不完全になる）
+- **入れる前に読む** … `SKILL.md` の中身を必ず確認してから導入する
 - **信頼できる出所だけ** … 配布元が分からないものは使わない
 - **最小限にする** … 使うスキルだけを入れ、不要になったら外す
 - **機密の扱い** … スキルが外部とやり取りする場合は、何を送るのかを確認する
-
-!!! tip
-    迷ったら導入を見送るのが安全です。判断に困るスキルは、情報システム担当に相談してください。
