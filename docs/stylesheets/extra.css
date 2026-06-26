@@ -1,0 +1,38 @@
+/* Anthropic 風（クレイ系＋オフホワイト）のカスタムカラー */
+
+:root {
+  --md-primary-fg-color:        #C96442; /* clay / Claude orange */
+  --md-primary-fg-color--light: #D98567;
+  --md-primary-fg-color--dark:  #A84E30;
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: #ffffffcc;
+  --md-accent-fg-color:         #A84E30;
+}
+
+/* ライト：温かみのあるオフホワイト背景 */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color:    #FAF9F5;
+  --md-typeset-a-color:     #A84E30;
+  --md-footer-bg-color:     #2B2520;
+}
+
+/* ダーク：クレイのアクセントは維持 */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:    #C96442;
+  --md-accent-fg-color:     #D98567;
+  --md-typeset-a-color:     #E29C82;
+}
+
+/* 見出しを少し締める（社内資料らしい落ち着き） */
+.md-typeset h1,
+.md-typeset h2 {
+  font-weight: 700;
+  letter-spacing: .01em;
+}
+
+/* スクリーンショットに枠と余白（プライバシー注記との相性も考慮） */
+.md-typeset img {
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .12);
+  max-width: 100%;
+}

@@ -1,0 +1,73 @@
+site_name: Claude 導入ガイド
+site_description: Claude Desktop を新しく使い始める方のためのクイックスタート＆セットアップガイド
+site_author: redjp
+site_url: https://redjp.github.io/claude_setup_guide/
+docs_dir: docs
+
+theme:
+  name: material
+  language: ja
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: ダークモードに切り替え
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: ライトモードに切り替え
+  font:
+    text: Noto Sans JP
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.keys
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search:
+      lang: ja
+
+nav:
+  - はじめに: index.md
+  - クイックスタート: quickstart.md
+  - おすすめ設定: settings.md
+  - データ連携（Connectors）: connectors.md
+  - モデルと推論レベルの選び方: models.md
+  - Cowork の使い方: cowork.md
+  - スキル（Skills）: skills.md
+  - Code 機能を使う: code.md
+  - ステップアップ：Claude Code CLI: cli.md
+  - 困ったとき（FAQ）: troubleshooting.md
