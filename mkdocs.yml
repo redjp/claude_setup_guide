@@ -70,4 +70,5 @@ nav:
   - スキル（Skills）: skills.md
   - Code 機能を使う: code.md
   - ステップアップ：Claude Code CLI: cli.md
+  - 情報の扱いとプラン: data-and-plans.md
   - 困ったとき（FAQ）: troubleshooting.md
